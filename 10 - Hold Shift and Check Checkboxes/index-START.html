@@ -1,101 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Hold Shift to Check Multiple Checkboxes</title>
-</head>
-<body>
-  <style>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hold Shift to Check Multiple Checkboxes</title>
+  </head>
+  <body>
+    <style>
+      html {
+        font-family: sans-serif;
+        background: #ffc600;
+      }
 
-    html {
-      font-family: sans-serif;
-      background: #ffc600;
-    }
+      .inbox {
+        max-width: 400px;
+        margin: 50px auto;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+      }
 
-    .inbox {
-      max-width: 400px;
-      margin: 50px auto;
-      background: white;
-      border-radius: 5px;
-      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
-    }
+      .item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #f1f1f1;
+      }
 
-    .item {
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #F1F1F1;
-    }
+      .item:last-child {
+        border-bottom: 0;
+      }
 
-    .item:last-child {
-      border-bottom: 0;
-    }
+      input:checked + p {
+        background: #f9f9f9;
+        text-decoration: line-through;
+      }
 
-    input:checked + p {
-      background: #F9F9F9;
-      text-decoration: line-through;
-    }
+      input[type="checkbox"] {
+        margin: 20px;
+      }
 
-    input[type="checkbox"] {
-      margin: 20px;
-    }
-
-    p {
-      margin: 0;
-      padding: 20px;
-      transition: background 0.2s;
-      flex: 1;
-      font-family:'helvetica neue';
-      font-size: 20px;
-      font-weight: 200;
-      border-left: 1px solid #D1E2FF;
-    }
-  </style>
-   <!--
+      p {
+        margin: 0;
+        padding: 20px;
+        transition: background 0.2s;
+        flex: 1;
+        font-family: "helvetica neue";
+        font-size: 20px;
+        font-weight: 200;
+        border-left: 1px solid #d1e2ff;
+      }
+    </style>
+    <!--
    The following is a common layout you would see in an email client.
 
    When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
 
   -->
-  <div class="inbox">
-    <div class="item">
-      <input type="checkbox">
-      <p>This is an inbox layout.</p>
+    <div class="inbox">
+      <div class="item">
+        <input type="checkbox" />
+        <p>This is an inbox layout.</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Check one item</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Hold down your Shift key</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Check a lower item</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Everything inbetween should also be set to checked</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Try to do it without any libraries</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Just regular JavaScript</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Good Luck!</p>
+      </div>
+      <div class="item">
+        <input type="checkbox" />
+        <p>Don't forget to tweet your result!</p>
+      </div>
     </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Check one item</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Hold down your Shift key</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Check a lower item</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Everything inbetween should also be set to checked</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Try to do it without any libraries</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Just regular JavaScript</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Good Luck!</p>
-    </div>
-    <div class="item">
-      <input type="checkbox">
-      <p>Don't forget to tweet your result!</p>
-    </div>
-  </div>
 
-<script>
-</script>
-</body>
+    <script>
+      const inputList = Array.from(document.querySelectorAll("input"));
+      let isShiftDown = false;
+
+      document.addEventListener("click", function handleClick(e) {
+        if (e.target.type === "checkbox" && isShiftDown) {
+          let indexOfTarget = inputList.indexOf(e.target);
+
+          toggleInputs(e.target.checked, indexOfTarget, inputList);
+        }
+      });
+
+      document.addEventListener("keydown", function handlePressShift(e) {
+        // if we press shift key...
+        if (e.keyCode === 16) {
+          isShiftDown = true;
+        }
+      });
+
+      document.addEventListener("keyup", function handleReleaseShift(e) {
+        // if we release shift key...
+        if (e.keyCode === 16) {
+          isShiftDown = false;
+        }
+      });
+
+      /**
+       *  @param isInputChecked {Boolean}
+       *  @param index {integer}
+       */
+      function toggleInputs(isInputChecked, index, inputList) {
+        if (index >= inputList.length)
+          throw new Error(
+            `toggleInputs(isInputChecked, index): argument index out of bounds. Index is ${index}, but it should be an integer with value in between 0 and ${inputList.length -
+              1}`
+          );
+        // check if there is any checked / unchecked value before input matching current index
+        let isPrevInputChecked = inputList
+          .slice(index)
+          .find(input => input.checked === isInputChecked);
+
+        if (isPrevInputChecked !== undefined) {
+          // cycle backwards from input matching current index, and check all inputs until reaching checked one
+          let i = index - 1;
+
+          while (i >= 0 && inputList[i].checked !== isInputChecked) {
+            inputList[i].checked = isInputChecked;
+            i--;
+          }
+        }
+      }
+    </script>
+  </body>
 </html>
