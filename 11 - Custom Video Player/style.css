@@ -19,12 +19,17 @@ body {
 }
 
 .player {
-  max-width: 750px;
+  /* max-width: 750px; */
   border: 5px solid rgba(0,0,0,0.2);
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   position: relative;
   font-size: 0;
   overflow: hidden;
+}
+
+.player__full-screen {
+  height: 100vh;
+  width: 100vw;
 }
 
 /* This css is only applied when fullscreen is active. */
@@ -159,4 +164,10 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50px;
   background: #ffc600;
   cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
 }
