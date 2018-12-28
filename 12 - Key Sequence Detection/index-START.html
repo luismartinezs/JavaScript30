@@ -7,6 +7,17 @@
 </head>
 <body>
 <script>
+  let userInput = [];
+  const secretCode = 'konami';
+
+  document.addEventListener("keyup", e => {
+    userInput.push(e.key);
+    userInput = userInput.splice(-secretCode.length, secretCode.length);
+    if (userInput.join('') === secretCode) {
+      console.log("DING DING!!");
+      cornify_add();
+    }
+  })
 </script>
 </body>
 </html>
