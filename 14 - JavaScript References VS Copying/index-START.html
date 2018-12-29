@@ -8,6 +8,11 @@
 
   <script>
     // start with strings, numbers and booleans
+    let age = 100;
+    let age2 = age;
+    console.log(age, age2); // 100 100
+    age = 200;
+    console.log(age, age2); // 200 100
 
     // Let's say we have an array
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
@@ -15,10 +20,14 @@
     // and we want to make a copy of it.
 
     // You might think we can just do something like this:
+    const team = players;
 
     // however what happens when we update that array?
+    team[1] = 'Jane';
 
     // now here is the problem!
+    console.log(players); // ["Wes", "Jane", "Ryan", "Poppy"]
+    console.log(team); // ["Wes", "Jane", "Ryan", "Poppy"]
 
     // oh no - we have edited the original array too!
 
@@ -27,12 +36,22 @@
     // So, how do we fix this? We take a copy instead!
 
     // one way
+    const team2 = players.slice();
+    team2[0] = 'Num2';
 
     // or create a new array and concat the old one in
+    const team3 = [].concat(players);
+    team3[0] = 'Num3';
 
     // or use the new ES6 Spread
+    const team4 = [...players];
+    team4[0] = 'Num4';
+
+    const team5 = Array.from(players);
+    team5[0] = 'Num5';
 
     // now when we update it, the original one isn't changed
+    console.log(players); // ["Wes", "Jane", "Ryan", "Poppy"]
 
     // The same thing goes for objects, let's say we have a person object
 
@@ -43,12 +62,54 @@
     };
 
     // and think we make a copy:
+    // const captain = person;
+    // captain.number = 99;
+    // console.log(person); // {name: "Wes Bos", age: 80, number: 99}
 
     // how do we take a copy instead?
+    const captain = Object.assign({}, person, {number: 99, age: 23});
+    console.log(person); // {name: "Wes Bos", age: 80}
+    console.log(captain); // {name: "Wes Bos", age: 23, number: 99}
 
     // We will hopefully soon see the object ...spread
+    const capt2 = {...person};
+    capt2.name = "Luis";
+    console.log(person); // {name: "Wes Bos", age: 80}
+    console.log(capt2); // {name: "Luis", age: 80}
 
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    const user = {
+      name: 'Luis',
+      age: 34,
+      social: {
+        twitter: '@luismartinez',
+        facebook: 'luism.dev',
+      },
+    }
+
+    // const admin = Object.assign({}, user);
+    // admin.age = 31;
+    // admin.social.twitter = '@johncrichton';
+    // console.log(user);
+    /** 
+    age: 34
+    name: "Luis"
+    social:
+      facebook: "luism.dev"
+      twitter: "@johncrichton" <<<!!! changed
+    */
+
+    const admin2 = JSON.parse(JSON.stringify(user)); // poor man's deep clone
+    admin2.social.twitter = '@wescraven';
+    console.log(user);
+    /**
+    age: 34
+    name: "Luis"
+    social:
+      facebook: "luism.dev"
+      twitter: "@luismartinez" <<< OK
+    */
+
 
   </script>
 
