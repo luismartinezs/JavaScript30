@@ -25,26 +25,19 @@
       const speedControl = document.querySelector(".speed");
       const speedBar = document.querySelector(".speed-bar");
       const initialRate = speedBar.offsetHeight / speedControl.offsetHeight;
-      let inControl = false;
       const minRate = 0.3;
 
-      speedControl.addEventListener("mouseenter", () => {
-        inControl = true;
-      });
-
-      speedControl.addEventListener("mouseleave", () => {
-        inControl = false;
-      });
-
-      speedControl.addEventListener("mousemove", e => {
-        if (!inControl) return;
+      const handleMove = e => {
         const relativeY = e.offsetY / speedControl.offsetHeight;
-        speedBar.style.setProperty("height", `${relativeY * 100}%`);
-        let playbackRate = (relativeY / initialRate * 0.7).toFixed(1);
+        let playbackRate = ((relativeY / initialRate) * 0.7).toFixed(1);
         playbackRate = playbackRate < minRate ? minRate : playbackRate;
+
+        speedBar.style.setProperty("height", `${relativeY * 100}%`);
         speedBar.textContent = `${playbackRate}x`;
         video.playbackRate = playbackRate;
-      });
+      };
+
+      speedControl.addEventListener("mousemove", handleMove);
     </script>
   </body>
 </html>
